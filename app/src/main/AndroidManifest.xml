@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Every permission below is a specific capability we're asking Android for.
+         Android will still ask the user to approve the sensitive ones (microphone,
+         notifications, exact alarms) at runtime - these lines just declare that
+         our app is allowed to ask. -->
+
+    <!-- Lets us schedule an alarm that fires at an EXACT time, even in battery-saver mode -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <!-- Lets the alarm keep ringing as a "foreground service" (see AlarmForegroundService.kt) -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <!-- Needed to show notifications at all on Android 13+ -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Needed for the "read this aloud" speech verification -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- Lets the alarm wake the CPU up even while the phone is asleep -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <application
+        android:allowBackup="true"
+        android:label="Wake Task Alarm"
+        android:theme="@style/Theme.Material3.DayNight.NoActionBar">
+
+        <!-- The normal screen you see when you tap the app icon -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- The full-screen "alarm is ringing" screen. showOnLockScreen + singleInstance
+             let it burst open on top of the lock screen exactly like a real alarm clock. -->
+        <activity
+            android:name=".AlarmActivity"
+            android:exported="false"
+            android:showOnLockScreen="true"
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance" />
+
+        <!-- The component Android calls automatically when the scheduled time arrives -->
+        <receiver
+            android:name=".AlarmReceiver"
+            android:exported="false" />
+
+        <!-- The background task that actually plays the sound and won't get killed -->
+        <service
+            android:name=".AlarmForegroundService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback" />
+
+    </application>
+</manifest>
