@@ -166,4 +166,4 @@ charge-only), or re-check Developer Options → USB debugging is on.
 Once it's running on your phone, tell me what happened (worked fine? a
 specific error? Logcat text?) and we'll move to Phase 2: making the alarm
 survive a phone restart, adding a custom font, and any of the extra
-features you want.
+features you want. Contact me at odoemechinonso@gmail.com
